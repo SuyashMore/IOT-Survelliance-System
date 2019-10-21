@@ -5,7 +5,6 @@ from threading import Thread
 import cv2
 from flask import Flask, Response, render_template, request
 
-
 class Streamer:
     """A clean wrapper class for a Flask OpenCV Video Streamer"""
 
@@ -38,14 +37,29 @@ class Streamer:
         # self.thread = Thread(daemon=True,target=self.flask.run,kwargs={"host" : "0.0.0.0","port": self.port,"debug": False,"threaded": True,})
 
         @self.flask.route("/poll")
+
+
+
         def poll():
             print("Poll Complete.....")
-            return "Poll Complete."
+            return f"Poll Complete"
 
         self.thread = Thread(daemon=True, target=self.flask.run,
                              kwargs={"port": self.port, "debug": False, "threaded": True, })
         self.thread.start()
         self.is_streaming = True
+
+        @self.flask.after_request
+        def add_header(r):
+            """
+            Add headers to both force latest IE rendering engine or Chrome Frame,
+            and also to cache the rendered page for 10 minutes.
+            """
+            r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            r.headers["Pragma"] = "no-cache"
+            r.headers["Expires"] = "0"
+            r.headers['Cache-Control'] = 'public, max-age=0'
+            return r
 
     def update_frame(self, frame):
         """Updates the frame for streaming"""
@@ -64,5 +78,7 @@ class Streamer:
             yield (msg.encode("utf-8") + self.frame_to_stream)
             prefix = "\r\n"
             time.sleep(1 / self.frame_rate)
+
+
 
 
