@@ -3,7 +3,7 @@ import time
 from threading import Thread
 
 import cv2
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, render_template, request,Markup
 
 class Streamer:
     """A clean wrapper class for a Flask OpenCV Video Streamer"""
@@ -16,6 +16,7 @@ class Streamer:
         self.is_streaming = False
         self.port = port
         self.frame_rate = frame_rate
+        self.isRecording = False
 
     def start_streaming(self):
         """Starts the video stream hosting process"""
@@ -31,13 +32,31 @@ class Streamer:
         @self.flask.route("/")
         def index():
             """Route which renders the video within an HTML template"""
-            return render_template("index.html")
+            buttonState = None
+            if self.isRecording:
+                buttonState  = Markup('<button onclick="startRecording()" id="recButton" value="1">Stop Recording</button>')
+            else:
+                buttonState = Markup('<button onclick="startRecording()" id="recButton" value="0">Start Recording</button>')
+
+
+            return render_template("index.html",recButton=buttonState)
+
+        @self.flask.route("/capture",methods = ['GET'])
+        def capture():
+            capture = request.args.get('startCapture')
+            if capture is "1":
+                print("Starting Recording Server")
+                self.isRecording = True
+            else:
+                self.isRecording = False
+                print("Stopping Recording Server")
+
+            return capture
 
 
         # self.thread = Thread(daemon=True,target=self.flask.run,kwargs={"host" : "0.0.0.0","port": self.port,"debug": False,"threaded": True,})
 
         @self.flask.route("/poll")
-
 
 
         def poll():
@@ -78,7 +97,3 @@ class Streamer:
             yield (msg.encode("utf-8") + self.frame_to_stream)
             prefix = "\r\n"
             time.sleep(1 / self.frame_rate)
-
-
-
-
