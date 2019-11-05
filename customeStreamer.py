@@ -3,7 +3,7 @@ import time
 from threading import Thread
 
 import cv2
-from flask import Flask, Response, render_template, request,Markup
+from flask import Flask, Response, render_template, request,Markup,redirect
 
 class Streamer:
     """A clean wrapper class for a Flask OpenCV Video Streamer"""
@@ -28,6 +28,10 @@ class Streamer:
             return Response(
                 gen_function(), mimetype="multipart/x-mixed-replace; boundary=jpgboundary"
             )
+
+        @self.flask.route('/done')
+        def done():
+            return redirect('/static/recVideos/sval.mp4')
 
         @self.flask.route("/")
         def index():
@@ -56,12 +60,12 @@ class Streamer:
 
         # self.thread = Thread(daemon=True,target=self.flask.run,kwargs={"host" : "0.0.0.0","port": self.port,"debug": False,"threaded": True,})
 
-        @self.flask.route("/poll")
+        # @self.flask.route("/poll")
 
 
-        def poll():
-            print("Poll Complete.....")
-            return f"Poll Complete"
+        # def poll():
+        #     print("Poll Complete.....")
+        #     return f"Poll Complete"
 
         self.thread = Thread(daemon=True, target=self.flask.run,
                              kwargs={"port": self.port, "debug": False, "threaded": True, })

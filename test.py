@@ -1,3 +1,7 @@
+import sys
+print(sys.version)
+quit()
+
 import cv2
 
 video = cv2.VideoCapture("http://192.168.0.100:4747/video")
