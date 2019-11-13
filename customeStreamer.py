@@ -4,6 +4,7 @@ from threading import Thread
 
 import cv2
 from flask import Flask, Response, render_template, request,Markup,redirect
+import fileWalker
 
 class Streamer:
     """A clean wrapper class for a Flask OpenCV Video Streamer"""
@@ -43,7 +44,18 @@ class Streamer:
                 buttonState = Markup('<button onclick="startRecording()" id="recButton" value="0">Start Recording</button>')
 
 
-            return render_template("index.html",recButton=buttonState)
+            recVideoString = ""
+            videos = fileWalker.getFilesIn("./static/recVideos/")
+
+            for videoname in videos:
+                recVideoString +=  "<video width=\"320\" height=\"240\" controls><source src=\"{{url_for('static', filename='recVideos/"
+                recVideoString+=videoname 
+                recVideoString+="')}}\" type=\"video/mp4\">Your browser does not support the video tag.</video> &nbsp &nbsp &nbsp"
+
+            recVideos = Markup(recVideoString)
+
+
+            return render_template("index.html",recButton=buttonState,rv = recVideos)
 
         @self.flask.route("/capture",methods = ['GET'])
         def capture():

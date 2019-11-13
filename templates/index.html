@@ -6,16 +6,20 @@
   <script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
 
   <body>
-    <h1>Video Streaming Demonstration: Hello World</h1>
+    <h1>Video Streaming:</h1>
     <img src="{{ url_for('video_feed') }}">
 
-
+    <br>
     {{recButton}}
-
+    <button>Start Notification Server</button>
+    <br>
+    <h2>Recorded Videos:</h2>
     <video width="320" height="240" controls>
       <source src="{{url_for('static', filename='recVideos/sval.mp4')}}" type="video/mp4">
     Your browser does not support the video tag.
     </video>
+
+    {{rv | safe }}
 
   </body>
 </html>
