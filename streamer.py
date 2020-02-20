@@ -9,8 +9,8 @@ VIDEO_RECORD_OUTFOLDER = "static/recVideos/"
 
 streamer = Streamer(port=100,frame_rate=60)
 
-video_capture = cv2.VideoCapture("http://192.168.43.62:4747/video")
-# video_capture = cv2.VideoCapture(0)
+# video_capture = cv2.VideoCapture("http://192.168.43.62:4747/video")
+video_capture = cv2.VideoCapture(0)
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # cv2.VideoWriter_fourcc() does not exist
 video_writer = None
