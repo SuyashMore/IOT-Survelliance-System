@@ -3,7 +3,7 @@
 ### Made as a part of Internet of Things Mini-Project (Semester V)
 
 
-* Remote Access
+* Remote Access using Web-Page
 * Supports IP-Camera
 * Real-time camera Anomaly detection 
 * Alert User using Push-Notification
